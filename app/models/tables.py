@@ -7,7 +7,7 @@ class Usuario(db.Model):
     email = db.Column(db.String, unique=True)
     password = db.Column(db.String)
     nome = db.Column(db.String)
-    celular = db.Column(db.Integer, unique=True)
+    celular = db.Column(db.BigInteger, unique=True)
 
     def __init__(self, email, password, nome, celular):
         self.email = email

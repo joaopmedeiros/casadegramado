@@ -13,7 +13,7 @@ from app.models.tables import Usuario
 @app.route("/teste/<info>")
 @app.route("/teste",defaults={"info":None})
 def teste(info):
-    i = Usuario("gabriel.weich@bol.com.br",123456,"Gabriel Weich",123456)
+    i = Usuario("gabriel.weich@bol.com.br",123456,"Gabriel Weich",51995592474)
     db.session.add(i)
     db.session.commit()
 
