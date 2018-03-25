@@ -2,6 +2,8 @@ from app import app,db
 from flask import render_template
 from app.models.forms import LoginForm
 from app.models.tables import Usuario
+from flask import request
+from flask import jsonify
 
 # @app.route("/login", methods=["POST"])
 # def login():
@@ -10,13 +12,23 @@ from app.models.tables import Usuario
 #     return jsonify({ 'nome': 'eitchaa' }), 201
 
 
-@app.route("/teste/<info>")
-@app.route("/teste",defaults={"info":None})
-def teste(info):
-    i = Usuario("gabriel.weich@bol.com.br",123456,"Gabriel Weich",51995592474)
-    db.session.add(i)
-    db.session.commit()
+@app.route("/teste",methods=["POST"])
+def teste():
+    email = request.json.get('email')
+    senha = request.json.get('senha')
+    nome = request.json.get('nome')
+    telefone = request.json.get('telefone')
+    i = Usuario(email,senha,nome,telefone)
+    #db.session.add(i)
+    #db.session.commit()
+    return jsonify({ 'retorno': 'ok' }), 201
 
+
+# @app.route("/teste/<info>")
+# @app.route("/teste",defaults={"info":None})
+# def teste(info):
+#     i = Usuario.query.filter_by(email="gabriel.weich@bol.com.br").first()
+#     return "{},{},{}".format(i.email,i.nome,i.password)
 
 
 @app.route("/")

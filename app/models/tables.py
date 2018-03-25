@@ -1,11 +1,12 @@
 from app import db
 
 
+
 class Usuario(db.Model):
     __tablename__ = "usuarios"
     id_usuario = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, unique=True)
-    password = db.Column(db.String)
+    password = db.Column(db.BigInteger)
     nome = db.Column(db.String)
     celular = db.Column(db.BigInteger, unique=True)
 
