@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Casa de gramado</title>
     <link rel="stylesheet" href="{{ url_for('static',filename="css/bootstrap.min.css") }}">
-    
+
 </head>
 <body>
 
@@ -14,5 +14,7 @@
 {% else %}
 <p>Bem vindos a casa de gramado</p>
 {% endif %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="{{ url_for ('static',filename="js/bootstrap.min.js") }}"></script>
 </body>
 </html>

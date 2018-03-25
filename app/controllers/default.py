@@ -9,9 +9,13 @@ from flask import render_template
 
 @app.route("/home")
 @app.route("/index/<user>")
-@app.route("/",defaults={"user:None"})
+@app.route("/",defaults={"user":None})
 def index(user):
     return render_template('index.html',user=user)
+
+@app.route("/base")
+def base():
+    return render_template('base.html')
 
 # @app.route("/test")
 # @app.route("/test/<name>")
