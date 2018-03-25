@@ -1,24 +1,28 @@
 from app import app
-from flask import Flask, flash
-from flask_login import LoginManager
-from flask import request, Response
-from flask import jsonify
-from flask_cors import CORS
+from flask import render_template
 
-#
-#
 # @app.route("/login", methods=["POST"])
 # def login():
 #     username = request.json.get('username')
 #     password = request.json.get('password')
 #     return jsonify({ 'nome': 'eitchaa' }), 201
 
+@app.route("/home")
+@app.route("/index/<user>")
+@app.route("/",defaults={"user:None"})
+def index(user):
+    return render_template('index.html',user=user)
 
-@app.route('/', methods=['POST','GET'])
-def helloworld():
-    return 'Hello world'
+# @app.route("/test")
+# @app.route("/test/<name>")
+# def teste(name=None):
+#     if name:
+#         return "Ola {}!".format(name)
+#     else:
+#        return "Ola, usuario"
 
-# if __name__ == "__main__":
-#     port = int(os.environ.get("PORT",5000))
-#     app.run(host='0.0.0.0', port=port)
+
+# @app.route("/test/<int:id>", methods=["GET","POST"])
+# def test(id):
+#     return str(id)
 

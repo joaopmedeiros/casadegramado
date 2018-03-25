@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Casa de gramado</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename="css/bootstrap.min.css") }}">
+    
+</head>
+<body>
+
+<h1>Casa de gramado</h1>
+{% if user %}
+<p>Bem vindos a casa de gramado, {{ user }}!</p>
+{% else %}
+<p>Bem vindos a casa de gramado</p>
+{% endif %}
+</body>
+</html>
