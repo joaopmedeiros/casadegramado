@@ -20,6 +20,14 @@ class Usuario(db.Model):
     def __repr__(self):
         return "<Email Usuario %r>" % self.email
 
+class Codigos(db.Model):
+    __tablename__ = "codigos"
+    id_codigo = db.Column(db.Integer,primary_key=True)
+    codigo = db.Column(db.String, unique=True)
+
+    def __init__(self,codigo):
+        self.codigo = codigo
+
 class Reservas(db.Model):
     __tablename__ = "reservas"
     id_reserva = db.Column(db.Integer, primary_key=True)
