@@ -5,6 +5,7 @@ from app.models.tables import Usuario
 from flask import request
 from flask import jsonify
 
+
 # @app.route("/login", methods=["POST"])
 # def login():
 #     username = request.json.get('username')
@@ -19,8 +20,8 @@ def teste():
     nome = request.json.get('nome')
     telefone = request.json.get('telefone')
     i = Usuario(email,senha,nome,telefone)
-    #db.session.add(i)
-    #db.session.commit()
+    db.session.add(i)
+    db.session.commit()
     return jsonify({ 'retorno': 'ok' }), 201
 
 
