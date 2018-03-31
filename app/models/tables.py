@@ -1,14 +1,28 @@
 from app import db
 
-
-
 class Usuario(db.Model):
     __tablename__ = "usuarios"
-    id_usuario = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, unique=True)
     password = db.Column(db.BigInteger)
     nome = db.Column(db.String)
     celular = db.Column(db.BigInteger, unique=True)
+    adm = db.Column(db.Boolean)
+
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.id)
 
     def __init__(self, email, password, nome, celular):
         self.email = email
@@ -34,7 +48,7 @@ class Reservas(db.Model):
     data_checkin = db.Column(db.Date)
     data_checkout = db.Column(db.Date)
     valor = db.Column(db.Float)
-    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id_usuario'))
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'))
     desconto = db.Column(db.Float)
     valor_final = db.Column(db.Float)
 

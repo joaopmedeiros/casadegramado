@@ -1,43 +1,62 @@
-from app import app,db
-from flask import render_template
+from app import app,db, lm
+from flask import render_template, flash
 from app.models.forms import LoginForm
 from app.models.tables import Usuario
 from app.models.tables import Codigos
 from flask import request
 from flask import jsonify
 import random
+from flask_login import login_user, logout_user, login_fresh, login_required, current_user
+
+@lm.user_loader
+def load_user(id):
+    return Usuario.query.filter_by(id=id).first()
+
+@app.route("/estalogado", methods=["GET"])
+def estalogado():
+    if login_fresh():
+        return jsonify({'retorno': 'usuario logado'}), 200
+    else:
+        return jsonify({'retorno': 'usuario nao logado, ou sessao expirada'}), 422
 
 @app.route("/")
 def index():
     return render_template('index.html')
 
-@app.route("/login", methods=["POST","GET"])
+@app.route("/login", methods=["POST"])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        print(form.username.data)
-        print(form.password.data)
+    email = request.json.get('email')
+    senha = request.json.get('senha')
+    usuario = Usuario.query.filter_by(email=email).first()
+    if usuario and usuario.password == senha:
+        login_user(usuario)
+        return jsonify({'retorno': 'usuario logado'}), 200
     else:
-        print(form.errors)
-    return render_template('login.html', form=form)
+        return jsonify({'retorno': 'usuario ou senha invalidos'}), 422
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    logout_user()
+    return jsonify({'retorno': 'usuario deslogado'}), 200
 
 @app.route("/geracodigo", methods=["GET"])
+@login_required
 def geraCodigo():
-    codigosExistentes = [x.codigo for x in Codigos.query.all()]
-    algarismos = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
-              'V',
-              'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
-    while(True):
-        codigo = ''.join([algarismos[random.randint(0, len(algarismos) - 1)] for x in range(6)])
-        if codigo not in codigosExistentes:
-            break
-    novoCodigo = Codigos(codigo)
-    db.session.add(novoCodigo)
-    db.session.commit()
-    return str(codigo)
+    if current_user.adm:
+        codigosExistentes = [x.codigo for x in Codigos.query.all()]
+        algarismos = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U','V','W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+        while(True):
+            codigo = ''.join([algarismos[random.randint(0, len(algarismos) - 1)] for x in range(6)])
+            if codigo not in codigosExistentes:
+                break
+        novoCodigo = Codigos(codigo)
+        db.session.add(novoCodigo)
+        db.session.commit()
+        return jsonify({'retorno' : str(codigo)}), 200
+    else:
+        return jsonify({'retorno' : "Voce nao tem as credenciais necessarias"}), 422
 
 @app.route("/cadastra",methods=["POST"])
-@app.route("/teste",methods=["POST"])
 def teste():
     email = request.json.get('email')
     senha = request.json.get('senha')
@@ -57,13 +76,15 @@ def teste():
 
 
 
+
+
+
+
 # @app.route("/teste/<info>")
 # @app.route("/teste",defaults={"info":None})
 # def teste(info):
 #     i = Usuario.query.filter_by(email="gabriel.weich@bol.com.br").first()
 #     return "{},{},{}".format(i.email,i.nome,i.password)
-
-
 
 
 # @app.route("/test")
@@ -79,3 +100,14 @@ def teste():
 # def test(id):
 #     return str(id)
 
+# @app.route("/loginteste", methods=["POST","GET"])
+# def loginTeste():
+#     form = LoginForm()
+#     if form.validate_on_submit():
+#         usuario = Usuario.query.filter_by(email=form.username.data).first()
+#         if usuario and usuario.password == form.password.data:
+#             login_user(usuario)
+#             print("Logged in")
+#     else:
+#         print("Invalid login.")
+#     return render_template('login.html', form=form)
