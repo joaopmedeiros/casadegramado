@@ -30,9 +30,24 @@ def login():
     usuario = Usuario.query.filter_by(email=email).first()
     if usuario and usuario.password == senha:
         login_user(usuario)
-        return jsonify({'retorno': 'usuario logado'}), 200
+        id_usuario = usuario.id
+        return jsonify({'retorno': 'usuario logado', 'id_usuario': id_usuario}), 200
     else:
         return jsonify({'retorno': 'usuario ou senha invalidos'}), 422
+
+@app.route("/getusuario", methods=["POST"])
+@login_required
+def getusuario():
+    id_usuario = request.json.get('id_usuario')
+    usuario = Usuario.query.filter_by(id=id_usuario).first()
+    nome = usuario.nome
+    email = usuario.email
+    telefone = usuario.celular
+    if usuario:
+        return jsonify({'retorno': 'ok', 'nome': nome, 'email': email, 'telefone': telefone})
+    else:
+        return jsonify({'retorno': 'id incorreto'}), 422
+
 
 @app.route("/logout", methods=["POST"])
 def logout():
@@ -69,6 +84,7 @@ def teste():
         db.session.add(novoUsuario)
         db.session.delete(codigoUsado)
         db.session.commit()
-        return jsonify({ 'retorno': 'ok' }), 201
+        id_usuario = novoUsuario.id
+        return jsonify({ 'retorno': 'ok', 'id_usuario': id_usuario }), 201
     else:
         return jsonify({ 'retorno': 'codigo incorreto' }), 422
