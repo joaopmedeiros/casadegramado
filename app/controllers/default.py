@@ -10,9 +10,11 @@ from datetime import timedelta
 import random
 from flask_login import login_user, logout_user, login_fresh, login_required, current_user
 
+
 @lm.user_loader
 def load_user(id):
     return Usuario.query.filter_by(id=id).first()
+
 
 @app.route("/")
 def index():
@@ -20,13 +22,18 @@ def index():
         return render_template('logado.html')
     return render_template('index.html')
 
+
 @app.route("/logado")
 def logado():
     return render_template('logado.html')
 
+
 @app.route("/gerador")
 def gerador():
-    return render_template('gerador.html')
+    if login_fresh():
+        return render_template('gerador.html')
+    else:
+        return index()
 
 
 @app.route("/estalogado", methods=["GET"])
@@ -48,6 +55,7 @@ def do_admin_login():
     else:
         return 'senha incorreta'
 
+
 @app.route("/login", methods=["POST"])
 def login():
     email = request.json.get('email')
@@ -59,6 +67,7 @@ def login():
         return jsonify({'retorno': 'usuario logado', 'id_usuario': id_usuario}), 200
     else:
         return jsonify({'retorno': 'usuario ou senha invalidos'}), 422
+
 
 @app.route("/getusuario", methods=["POST"])
 @login_required
@@ -73,10 +82,18 @@ def getusuario():
     else:
         return jsonify({'retorno': 'id incorreto'}), 422
 
+
 @app.route("/logout", methods=["POST"])
 def logout():
     logout_user()
     return jsonify({'retorno': 'usuario deslogado'}), 200
+    
+
+@app.route("/logout_aitinha", methods=["POST"])
+def logout_aitinha():
+    logout_user()
+    return index()
+
 
 @app.route("/geracodigo", methods=["GET"])
 @login_required
@@ -94,6 +111,7 @@ def geraCodigo():
         return jsonify({'retorno' : str(codigo)}), 200
     else:
         return jsonify({'retorno' : "Voce nao tem as credenciais necessarias"}), 422
+
 
 @app.route("/cadastra",methods=["POST"])
 def teste():
@@ -113,6 +131,7 @@ def teste():
     else:
         return jsonify({ 'retorno': 'codigo incorreto' }), 422
 
+
 @app.route("/reserva", methods=["POST"])
 @login_required
 def reserva():    
@@ -127,6 +146,7 @@ def reserva():
     db.session.add(nova_reserva)
     db.session.commit()
     return jsonify({ 'retorno': 'ok', 'id_reserva': nova_reserva.id_reserva }), 201
+
 
 @app.route("/datasreservadas", methods=["GET"])
 @login_required
