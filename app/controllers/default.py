@@ -1,10 +1,12 @@
 from app import app,db, lm
 from flask import render_template, flash
 from app.models.forms import LoginForm
-from app.models.tables import Usuario
+from app.models.tables import Usuario, Reservas
 from app.models.tables import Codigos
 from flask import request
 from flask import jsonify
+from datetime import datetime
+from datetime import timedelta
 import random
 from flask_login import login_user, logout_user, login_fresh, login_required, current_user
 
@@ -12,16 +14,39 @@ from flask_login import login_user, logout_user, login_fresh, login_required, cu
 def load_user(id):
     return Usuario.query.filter_by(id=id).first()
 
+@app.route("/")
+def index():
+    if login_fresh():
+        return render_template('logado.html')
+    return render_template('index.html')
+
+@app.route("/logado")
+def logado():
+    return render_template('logado.html')
+
+@app.route("/gerador")
+def gerador():
+    return render_template('gerador.html')
+
+
 @app.route("/estalogado", methods=["GET"])
 def estalogado():
     if login_fresh():
-        return jsonify({'retorno': 'usuario logado'}), 200
+        return jsonify({'retorno': 'usuario logado', 'id_usuario': current_user.id}), 200
     else:
         return jsonify({'retorno': 'usuario nao logado, ou sessao expirada'}), 422
 
-@app.route("/")
-def index():
-    return render_template('index.html')
+
+@app.route('/login_aitinha', methods=['POST'])
+def do_admin_login():
+    email = request.form['email']
+    senha = int(request.form['senha'])
+    usuario = Usuario.query.filter_by(email=email).first()
+    if usuario and usuario.adm and usuario.password == senha:
+        login_user(usuario)
+        return logado()
+    else:
+        return 'senha incorreta'
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -47,7 +72,6 @@ def getusuario():
         return jsonify({'retorno': 'ok', 'nome': nome, 'email': email, 'telefone': telefone})
     else:
         return jsonify({'retorno': 'id incorreto'}), 422
-
 
 @app.route("/logout", methods=["POST"])
 def logout():
@@ -79,12 +103,40 @@ def teste():
     telefone = request.json.get('telefone')
     codigo = request.json.get('codigo')
     if codigo in [x.codigo for x in Codigos.query.all()]:
-        novoUsuario = Usuario(email,senha,nome,telefone)
-        codigoUsado = Codigos.query.filter_by(codigo=codigo).first()
-        db.session.add(novoUsuario)
-        db.session.delete(codigoUsado)
+        novo_usuario = Usuario(email,senha,nome,telefone)
+        codigo_usado = Codigos.query.filter_by(codigo=codigo).first()
+        db.session.add(novo_usuario)
+        db.session.delete(codigo_usado)
         db.session.commit()
-        id_usuario = novoUsuario.id
+        id_usuario = novo_usuario.id
         return jsonify({ 'retorno': 'ok', 'id_usuario': id_usuario }), 201
     else:
         return jsonify({ 'retorno': 'codigo incorreto' }), 422
+
+@app.route("/reserva", methods=["POST"])
+@login_required
+def reserva():    
+    data_checkin = request.json.get('data_checkin')
+    data_checkout = request.json.get('data_checkout')
+    valor = request.json.get('valor')
+    id_usuario = request.json.get('id_usuario')
+    desconto = request.json.get('desconto')
+    valor_final = request.json.get('valor_final')
+
+    nova_reserva = Reservas(data_checkin,data_checkout,valor,id_usuario,desconto,valor_final)
+    db.session.add(nova_reserva)
+    db.session.commit()
+    return jsonify({ 'retorno': 'ok', 'id_reserva': nova_reserva.id_reserva }), 201
+
+@app.route("/datasreservadas", methods=["GET"])
+@login_required
+def datasreservadas():
+    datas = []
+    for i in Reservas.query.all():
+        datas.append(i.data_checkin)
+        data_atual = i.data_checkin
+        data_checkout = i.data_checkout
+        while (data_atual != data_checkout):
+            data_atual = data_atual + timedelta(days=1)
+            datas.append(data_atual)
+    return jsonify({ 'retorno': 'ok', 'datas': datas }), 201

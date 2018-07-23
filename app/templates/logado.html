@@ -11,16 +11,11 @@
 
       <div class="container">
         <!-- Example row of columns -->
-      <h1>Por favor , logar-se</h1>
-      <br>
-      <form action="/login_aitinha" method="POST">
-        <input type="email" name="email" placeholder="Username">
-        <input type="password" name="senha" placeholder="Password">
-        <input type="submit" value="Log in">
+      <h1>Logado!</h1>
+      <form action="/logout" method="POST">
+        <input type="submit" value="Sair">
       </form>
-      {% if error %}
-        <p class="error"><strong>Error:</strong> {{ error }}
-      {% endif %}
+      <br>
     </div>         
 
         <hr>
