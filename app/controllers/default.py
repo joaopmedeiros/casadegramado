@@ -7,6 +7,7 @@ from flask import request
 from flask import jsonify
 from datetime import datetime
 from datetime import timedelta
+from collections import defaultdict as dt
 import random
 from flask_login import login_user, logout_user, login_fresh, login_required, current_user
 
@@ -135,17 +136,40 @@ def teste():
 @app.route("/reserva", methods=["POST"])
 @login_required
 def reserva():    
+    DIARIA = 1500
     data_checkin = request.json.get('data_checkin')
     data_checkout = request.json.get('data_checkout')
-    valor = request.json.get('valor')
     id_usuario = request.json.get('id_usuario')
-    desconto = request.json.get('desconto')
-    valor_final = request.json.get('valor_final')
+    # valor = request.json.get('valor')    
+    # desconto = request.json.get('desconto')
+    # valor_final = request.json.get('valor_final')
+    
+    DATE_FORMAT = '%a, %d %b %Y %H:%M:%S %Z'
+    dtcheckin = datetime.strptime(data_checkin, DATE_FORMAT)
+    dtcheckout = datetime.strptime(data_checkout, DATE_FORMAT)    
+    delta = dtcheckout - dtcheckin
+    dias = delta.days
+
+    valor = DIARIA * dias
+    desconto = 0
+    valor_final = valor    
 
     nova_reserva = Reservas(data_checkin,data_checkout,valor,id_usuario,desconto,valor_final)
     db.session.add(nova_reserva)
     db.session.commit()
     return jsonify({ 'retorno': 'ok', 'id_reserva': nova_reserva.id_reserva }), 201
+
+@app.route("/getreservas", methods=["POST"])
+@login_required
+def getreservas():
+    id_usuario = request.json.get('id_usuario')
+    reservas_usr = []
+    lista_reservas = Reservas.query.filter_by(usuario_id=id_usuario).all()
+    for i in lista_reservas:        
+        reservas_usr.append((i.data_checkin,i.data_checkout))
+    dict_user = dt(list)
+    dict_user[id_usuario] = reservas_usr
+    return jsonify({ 'retorno': 'ok', 'reservas': dict_user }), 200
 
 
 @app.route("/datasreservadas", methods=["GET"])
@@ -159,4 +183,4 @@ def datasreservadas():
         while (data_atual != data_checkout):
             data_atual = data_atual + timedelta(days=1)
             datas.append(data_atual)
-    return jsonify({ 'retorno': 'ok', 'datas': datas }), 201
+    return jsonify({ 'retorno': 'ok', 'datas': datas }), 200
