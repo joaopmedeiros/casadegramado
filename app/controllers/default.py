@@ -48,7 +48,7 @@ def estalogado():
 @app.route('/login_aitinha', methods=['POST'])
 def do_admin_login():
     email = request.form['email']
-    senha = int(request.form['senha'])
+    senha = request.form['senha']
     usuario = Usuario.query.filter_by(email=email).first()
     if usuario and usuario.adm and usuario.password == senha:
         login_user(usuario)

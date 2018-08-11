@@ -4,7 +4,7 @@ class Usuario(db.Model):
     __tablename__ = "usuarios"
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, unique=True)
-    password = db.Column(db.BigInteger)
+    password = db.Column(db.String)
     nome = db.Column(db.String)
     celular = db.Column(db.BigInteger, unique=True)
     adm = db.Column(db.Boolean)
