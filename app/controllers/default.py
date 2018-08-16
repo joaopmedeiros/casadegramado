@@ -65,12 +65,13 @@ def login():
     if usuario and usuario.password == senha:
         login_user(usuario)
         id_usuario = usuario.id
-        return jsonify({'retorno': 'usuario logado', 'id_usuario': id_usuario}), 200
+        return jsonify({'retorno': 'usuario logado', 'id_usuario': id_usuario, 'adm': str(current_user.adm)}), 200
     else:
         return jsonify({'retorno': 'usuario ou senha invalidos'}), 422
 
 
 @app.route("/getusuario", methods=["POST"])
+@login_required
 def getusuario():
     id_usuario = request.json.get('id_usuario')
     usuario = Usuario.query.filter_by(id=id_usuario).first()
@@ -96,6 +97,7 @@ def logout_aitinha():
 
 
 @app.route("/geracodigo", methods=["GET"])
+@login_required
 def geraCodigo():
     if current_user.adm:
         codigosExistentes = [x.codigo for x in Codigos.query.all()]
@@ -132,6 +134,7 @@ def teste():
 
 
 @app.route("/reserva", methods=["POST"])
+@login_required
 def reserva():    
     DIARIA = 1500
     data_checkin = request.json.get('data_checkin')
@@ -157,6 +160,7 @@ def reserva():
     return jsonify({ 'retorno': 'ok', 'id_reserva': nova_reserva.id_reserva }), 201
 
 @app.route("/getreservas", methods=["POST"])
+@login_required
 def getreservas():
     id_usuario = request.json.get('id_usuario')
     reservas_usr = []
