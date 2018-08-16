@@ -6,7 +6,7 @@ class Usuario(db.Model):
     email = db.Column(db.String, unique=True)
     password = db.Column(db.String)
     nome = db.Column(db.String)
-    celular = db.Column(db.BigInteger, unique=True)
+    celular = db.Column(db.String, unique=True)
     adm = db.Column(db.Boolean)
 
     @property
