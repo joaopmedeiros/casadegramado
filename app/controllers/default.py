@@ -169,6 +169,7 @@ def getreservas():
 
 
 @app.route("/datasreservadas", methods=["GET"])
+@login_required
 def datasreservadas():
     datas = []
     for i in Reservas.query.all():
