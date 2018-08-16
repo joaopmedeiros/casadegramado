@@ -1,0 +1,32 @@
+{%  extends 'base.html' %}
+{% block content %}
+<main role="main">
+
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <div class="container">
+          <h1 class="display-3">Api do Aitinha!</h1>                 
+        </div>
+      </div>
+
+      <div class="container">
+        <!-- Example row of columns -->
+      <h1>Por favor , logar-se</h1>
+      <br>
+      <form action="/login_aitinha" method="POST">
+        <input type="email" name="email" placeholder="Username">
+        <input type="password" name="senha" placeholder="Password">
+        <input type="submit" value="Log in">
+      </form>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    </div>         
+
+        <hr>
+
+      </div> <!-- /container -->
+
+</main>
+
+{% endblock %}

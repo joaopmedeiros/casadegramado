@@ -22,6 +22,11 @@ def load_user(id):
 def index(path):
     return render_template('index.html')
 
+@app.route("/aitinha")
+def index2():
+    if login_fresh():
+        return render_template('logado.html')
+    return render_template('index2.html')
 
 
 @app.route("/logado")
@@ -34,7 +39,7 @@ def gerador():
     if login_fresh():
         return render_template('gerador.html')
     else:
-        return index()
+        return index2()
 
 
 @app.route("/estalogado", methods=["GET"])
@@ -93,7 +98,7 @@ def logout():
 @app.route("/logout_aitinha", methods=["POST"])
 def logout_aitinha():
     logout_user()
-    return index()
+    return index2()
 
 
 @app.route("/geracodigo", methods=["GET"])
