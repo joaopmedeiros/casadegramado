@@ -15,7 +15,7 @@
       <script>
       $(document).ready(function(){
           $("button").click(function(){
-              $.getJSON("http://casadegramado.herokuapp.com/geracodigo", function(result){
+              $.getJSON("https://casadegramado.herokuapp.com/geracodigo", function(result){
                   console.log(result);
                   $.each(result, function(i, field){
                       document.getElementById("codigo").append(field + " ");
