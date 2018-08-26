@@ -14,12 +14,6 @@ const cadastroFail = (error) => {
     }
 }
 
-const cadatroSuccess = (id) => {
-    return {
-        type: types.CADASTRO_SUCCESS,
-        id,
-    }
-}
 
 export const cadastro = (usuario) => async dispatch => {
     usuario = {...usuario, telefone: usuario.telefone.replace(/[(\s)]/g, '')}
@@ -28,7 +22,7 @@ export const cadastro = (usuario) => async dispatch => {
     try {
         const res = await axios.post('/cadastra', usuario)
         console.log(res)
-        dispatch(cadatroSuccess(res.id_usuario));
+        dispatch({type: types.CADASTRO_SUCCESS, id:res.data.id_usuario})
     }
     catch (error) {
         dispatch(cadastroFail(error))

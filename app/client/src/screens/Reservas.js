@@ -16,10 +16,10 @@ import { DateRangePicker } from 'react-dates';
 
 class Reservas extends React.Component {
     state = {
-        data: null,
         startDate: null,
         endDate: null,
-        focusedInput: null
+        focusedInput: null,
+        clean: false
     }
 
     componentDidMount() {
@@ -36,8 +36,8 @@ class Reservas extends React.Component {
 
     render() {
         const { endDate, startDate } = this.state
-        console.log(this.props.minhasReservas)
-        console.log(this.props.minhasReservasLoading)
+
+        if (this.props.loading && !this.state.clean) this.setState({clean: true})
         return (
             <div>
                 <Typography variant="display2" style={{ fontSize: 30, color: '#1B5E20', opacity: 1, marginTop: 20, marginLeft: 20 }}>
@@ -51,6 +51,7 @@ class Reservas extends React.Component {
                             :
                             <DateRangePicker
                                 isDayBlocked={d => this.props.datasReservadas.has(d.format("DD/MM/YYYY"))}
+                                disabled={this.state.loading}
                                 noBorder={true}
                                 startDatePlaceholderText="Data Inicial"
                                 endDatePlaceholderText="Data Final"

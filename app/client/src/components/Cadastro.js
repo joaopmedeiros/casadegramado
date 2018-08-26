@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import Input from '@material-ui/core/Input';
 import MaskedInput from 'react-text-mask'
+import { Redirect } from 'react-router'
 
 import { connect } from 'react-redux';
 
@@ -62,6 +63,7 @@ class Cadastro extends React.Component {
     render() {
         return (
             <div>
+                {this.props.isAuthenticated && this.props.open && <Redirect to="/reservas" />}
                 <Dialog
                     open={this.props.open}
                     onClose={this.props.handleClose}
@@ -110,7 +112,7 @@ class Cadastro extends React.Component {
                     </DialogContent>
                     <DialogActions style={{ flexDirection: 'column', justifyContent: 'center' }}>
                         {this.props.loading
-                            ? <CircularProgress/>
+                            ? <CircularProgress style={{overflow: 'auto', textAlign: 'center'}}/>
                             : <Button onClick={this.handleEnviar} variant="raised" color="primary">
                                 Enviar
                               </Button>
@@ -125,7 +127,8 @@ class Cadastro extends React.Component {
 const mapStateToProps = (state) => {
     return {
         loading: state.usuario.cadastroLoading,
-        error: state.usuario.cadastroError
+        error: state.usuario.cadastroError,
+        isAuthenticated: Boolean(state.usuario.id)
     }
 }
 

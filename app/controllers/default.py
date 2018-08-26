@@ -133,6 +133,7 @@ def teste():
         db.session.delete(codigo_usado)
         db.session.commit()
         id_usuario = novo_usuario.id
+        login_user(novo_usuario)
         return jsonify({ 'retorno': 'ok', 'id_usuario': id_usuario }), 201
     else:
         return jsonify({ 'retorno': 'codigo incorreto' }), 422
