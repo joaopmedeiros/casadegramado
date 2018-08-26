@@ -37,6 +37,7 @@ class Reservas extends React.Component {
     render() {
         const { endDate, startDate } = this.state
         console.log(this.props.minhasReservas)
+        console.log(this.props.minhasReservasLoading)
         return (
             <div>
                 <Typography variant="display2" style={{ fontSize: 30, color: '#1B5E20', opacity: 1, marginTop: 20, marginLeft: 20 }}>
@@ -86,7 +87,7 @@ class Reservas extends React.Component {
                 </Typography>
                 <div style={{ margin: 20, color: '#1B5E20', alignSelf: 'center' }}>
                     {
-                        this.props.minhasReservas
+                        this.props.minhasReservas.length > 0
                             ?
                             <Paper>
                                 <Table>
@@ -111,7 +112,7 @@ class Reservas extends React.Component {
                                 </Table>
                             </Paper>
                             :
-                            this.propś.minhasReservasLoading
+                            this.props.minhasReservasLoading
                                 ?
                                 <CircularProgress/>
                                 :

@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
-import titleImage from '../images/6.jpg'
+import titleImage from '../images/gesiel.png'
 import './Gesiel/styles.css'
 import Login from '../components/Login'
 import Cadastro from '../components/Cadastro'

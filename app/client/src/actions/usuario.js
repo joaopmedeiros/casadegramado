@@ -1,5 +1,5 @@
 import * as types from './types'
-import axios from '../axios'
+import axios from 'axios'
 
 const cadastroStart = () => {
     return {
@@ -62,6 +62,7 @@ export const login = (email, senha) => async dispatch => {
     dispatch(loginStart())
     try {
         const res = await axios.post('/login', {email, senha})
+        console.log(res)
         dispatch(loginSuccess(res.data.id_usuario));
     }
     catch (error) {
@@ -69,10 +70,15 @@ export const login = (email, senha) => async dispatch => {
     }
 }
 
-export const logout = () => {
-    return {
-        type: types.LOGOUT
+export const logout = () => async dispatch => {
+    try{
+        dispatch({ type: types.LOGOUT })
+        await axios.post('/logout')
     }
+    catch(error){
+        console.log("erro no logout: " + error)
+    }
+    
 }
 
 

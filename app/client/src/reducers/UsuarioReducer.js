@@ -1,7 +1,7 @@
 import * as types from '../actions/types';
 
 const initialState = {
-    id: 1,
+    id: null,
     cadastroLoading: false,
     cadastroFail: null,
     loginLoading: false,

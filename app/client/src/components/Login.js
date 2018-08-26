@@ -32,9 +32,10 @@ class Login extends React.Component {
 
     render() {
         return (
-            <div>
+            <div style={{overflowY:'hidden'}}>
                 {this.props.isAuthenticated && this.props.open && <Redirect to="/reservas" />}
                 <Dialog
+                    style={{overflowY:'hidden'}}
                     open={this.props.open}
                     onClose={this.props.handleClose}
                 >
@@ -72,7 +73,7 @@ class Login extends React.Component {
                         </div>
 
                         {this.props.loading
-                            ? <CircularProgress/>
+                            ? <CircularProgress style={{overflow: 'auto', textAlign: 'center'}}/>
                             : <Button onClick={this.handleEntrar} variant="raised" color="primary">
                                 Entrar
                               </Button>

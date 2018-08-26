@@ -1,5 +1,5 @@
 import * as types from './types'
-import axios from '../axios'
+import axios from 'axios'
 
 import moment from 'moment'
 
