@@ -171,7 +171,7 @@ def getreservas():
     reservas_usr = []
     lista_reservas = Reservas.query.filter_by(usuario_id=id_usuario).all()
     for i in lista_reservas:        
-        reservas_usr.append((i.data_checkin,i.data_checkout))
+        reservas_usr.append((i.data_checkin,i.data_checkout,i.status))
     dict_user = dt(list)
     dict_user[id_usuario] = reservas_usr
     return jsonify({ 'retorno': 'ok', 'reservas': dict_user }), 200

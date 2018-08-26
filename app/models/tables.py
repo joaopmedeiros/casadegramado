@@ -51,6 +51,7 @@ class Reservas(db.Model):
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'))
     desconto = db.Column(db.Float)
     valor_final = db.Column(db.Float)
+    status = db.Column(db.String)
 
     usuario = db.relationship('Usuario', foreign_keys=usuario_id)
 
@@ -61,6 +62,7 @@ class Reservas(db.Model):
         self.usuario_id = usuario_id
         self.desconto = desconto
         self.valor_final = valor_final
+        self.status = 'Pendente'
 
     def __repr__(self):
         return "<Reserva %r>" % self.id_reserva
