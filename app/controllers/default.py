@@ -70,7 +70,7 @@ def login():
     if usuario and usuario.password == senha:
         login_user(usuario)
         id_usuario = usuario.id
-        return jsonify({'retorno': 'usuario logado', 'id_usuario': id_usuario, 'adm': str(current_user.adm)}), 200
+        return jsonify({'retorno': 'usuario logado', 'id_usuario': id_usuario, 'adm': bool(current_user.adm)}), 200
     else:
         return jsonify({'retorno': 'usuario ou senha invalidos'}), 422
 
@@ -133,6 +133,7 @@ def teste():
         db.session.delete(codigo_usado)
         db.session.commit()
         id_usuario = novo_usuario.id
+        login_user(novo_usuario)
         return jsonify({ 'retorno': 'ok', 'id_usuario': id_usuario }), 201
     else:
         return jsonify({ 'retorno': 'codigo incorreto' }), 422

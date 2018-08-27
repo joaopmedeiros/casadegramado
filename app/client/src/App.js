@@ -3,6 +3,7 @@ import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 
 import Home from './screens/Home';
+import Admin from './screens/Admin'
 import Reservas from './screens/Reservas'
 
 import 'react-dates/initialize';
@@ -23,6 +24,7 @@ const theme = createMuiTheme({
 
 class App extends Component {
     render() {
+        console.log(this.props.isAdmin)
         let routes = (
             <Switch>
                 <Route path="/" exact component={Home} />
@@ -39,12 +41,23 @@ class App extends Component {
                 </Switch>
             );
         }
+
+        if (this.props.isAdmin) {
+            routes = (
+                <Switch>
+                    <Route path="/reservas" component={Admin} />
+                    <Route path="/" exact component={Home} />
+                    <Redirect to="/" />
+                </Switch>
+            );
+        }
+
+
         return (
             <div>
                 <MuiThemeProvider theme={theme}>
                     <div>
-
-                        {this.props.isAuthenticated && <AppBar />}
+                        {this.props.isAuthenticated && <AppBar isAdmin={this.props.isAdmin}/>}
                         {routes}
                     </div>
                 </MuiThemeProvider>
@@ -55,7 +68,8 @@ class App extends Component {
 
 const mapStateToProps = state => {
     return {
-        isAuthenticated: Boolean(state.usuario.id)
+        isAuthenticated: Boolean(state.usuario.id),
+        isAdmin: Boolean(state.usuario.adm)
     }
 }
 

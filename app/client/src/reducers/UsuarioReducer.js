@@ -1,7 +1,8 @@
 import * as types from '../actions/types';
 
 const initialState = {
-    id: 1,
+    id: null,
+    adm: false,
     cadastroLoading: false,
     cadastroFail: null,
     loginLoading: false,
@@ -50,18 +51,20 @@ const loginFail = (state, error) => {
     }
 }
 
-const loginSuccess = (state, id) => {
+const loginSuccess = (state, id, adm) => {
     return {
         ...state,
         loginLoading: false,
         id,
+        adm,
     }
 }
 
 const logout = (state) => {
     return {
         ...state,
-        id: null
+        id: null,
+        adm: false
     }
 }
 
@@ -72,7 +75,7 @@ const reducer = (state = initialState, action) => {
         case types.CADASTRO_SUCCESS: return cadastroSuccess(state, action.id)
         case types.LOGIN_START: return loginStart(state);
         case types.LOGIN_FAIL: return loginFail(state, action.error)
-        case types.LOGIN_SUCCESS: return loginSuccess(state, action.id)
+        case types.LOGIN_SUCCESS: return loginSuccess(state, action.id, action.adm)
         case types.LOGOUT: return logout(state)
         default: return state;
     }

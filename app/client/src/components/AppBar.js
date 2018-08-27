@@ -23,7 +23,7 @@ const CustomAppBar = (props) => {
             }} position="static">
                 <Toolbar style={{ color: 'white', opacity: 1 }}>
                     <Typography variant="title" style={{ color: '#1B5E20', opacity: 1 }} className={classes.flex}>
-                        Casa de Gramado
+                        {props.isAdmin ? "Casa de Gramado - Admin" :  "Casa de Gramado"}
                     </Typography>
 
                     <Link style={{ textDecoration: 'none' }} to="/">
