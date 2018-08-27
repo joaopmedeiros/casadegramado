@@ -176,6 +176,29 @@ def getreservas():
     dict_user[id_usuario] = reservas_usr
     return jsonify({ 'retorno': 'ok', 'reservas': dict_user }), 200
 
+@app.route("/atualizareserva", methods=["POST"])
+@login_required
+def atualizareserva():
+    reserva_id = request.json.get('id_reserva')
+    acao = request.json.get('acao')
+    if current_user.adm:
+        possiveis_acoes = ['Aprovar','Cancelar']
+        if acao not in possiveis_acoes:
+            return jsonify({ 'retorno': 'Acao nao permitida' }), 422
+        else:
+            reserva = Reservas.query.filter_by(id_reserva=reserva_id).first()
+            atualiza_reserva = reserva.update().where(id_reserva=reserva_id).values(status=acao)
+            db.session.commit()
+            return jsonify({'retorno': 'Reserva atualizada'}), 200
+    else:
+        possiveis_acoes = ['Cancelar']
+        if acao not in possiveis_acoes:
+            return jsonify({ 'retorno': 'Acao nao permitida' }), 422
+        else:
+            reserva = Reservas.query.filter_by(id_reserva=reserva_id).first()
+            atualiza_reserva = reserva.update().where(id_reserva=reserva_id).values(status=acao)
+            db.session.commit()
+            return jsonify({'retorno': 'Reserva atualizada'}), 200
 
 @app.route("/datasreservadas", methods=["GET"])
 @login_required
