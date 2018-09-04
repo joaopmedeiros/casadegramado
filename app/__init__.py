@@ -5,7 +5,7 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_cors import CORS
 from flask_login import LoginManager
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="./client/build/static", template_folder="./client/build")
 app.config.from_object('config')
 db = SQLAlchemy(app)
 CORS(app)
