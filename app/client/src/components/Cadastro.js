@@ -46,7 +46,6 @@ class Cadastro extends React.Component {
     };
 
     handleEnviar = () => {
-        console.log(this.state)
         const { nome, telefone, email, senha, codigo } = this.state
         const usuario = {
             nome,
@@ -56,7 +55,6 @@ class Cadastro extends React.Component {
             codigo
         }
 
-        console.log(usuario)
         this.props.cadastrar(usuario)
     }
 

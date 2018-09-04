@@ -50,7 +50,6 @@ export const datasReservadas = () => async dispatch => {
     }
     catch (error) {
         dispatch(datasReservadasFail(error))
-        console.log(error)
     }
 }
 
@@ -86,6 +85,5 @@ export const minhasReservas = (idUsuario) => async dispatch => {
     }
     catch (error) {
         dispatch(minhasReservasFail(error))
-        console.log(error)
     }
 }

@@ -23,6 +23,8 @@ const theme = createMuiTheme({
 
 class App extends Component {
     render() {
+        console.log(this.props.isAdmin)
+
         let routes = (
             <Switch>
                 <Route path="/" exact component={Home} />
@@ -55,7 +57,8 @@ class App extends Component {
 
 const mapStateToProps = state => {
     return {
-        isAuthenticated: Boolean(state.usuario.id)
+        isAuthenticated: Boolean(state.usuario.id),
+        isAdmin: Boolean(state.usuario.adm)
     }
 }
 
