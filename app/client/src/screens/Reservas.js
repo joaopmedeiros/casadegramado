@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import Paper from '@material-ui/core/Paper';
+import moment from 'moment'
 
 import { connect } from 'react-redux';
 import * as actions from '../actions/reserva'
@@ -19,7 +20,8 @@ class Reservas extends React.Component {
         startDate: null,
         endDate: null,
         focusedInput: null,
-        clean: false
+        clean: false,
+        dataIntercalada: false
     }
 
     componentDidMount() {
@@ -34,10 +36,30 @@ class Reservas extends React.Component {
         }
     }
 
+    dateChangeHandler = ({ startDate, endDate }) => {
+        console.log(this.props.datasReservadas)
+        console.log(startDate)
+        console.log(endDate)
+        let x = startDate
+        let y = endDate
+
+
+        for (let i = moment(startDate); i.diff(endDate, 'days') <= 0; i.add(1, 'days')) {
+            if (this.props.datasReservadas.has(i.format('L'))) {
+                this.setState({ dataIntercalada: true })
+                return
+            }
+
+        }
+
+        this.setState({ startDate: x, endDate: y, dataIntercalada: false })
+
+    }
+
     render() {
         const { endDate, startDate } = this.state
-
-        if (this.props.loading && !this.state.clean) this.setState({clean: true})
+        if (this.props.loading && !this.state.clean) this.setState({ clean: true })
+        console.log(this.state.dataIntercalada)
         return (
             <div>
                 <Typography variant="display2" style={{ fontSize: 30, color: '#1B5E20', opacity: 1, marginTop: 20, marginLeft: 20 }}>
@@ -47,7 +69,7 @@ class Reservas extends React.Component {
                     <div >
                         {this.props.datasReservadasLoading
                             ?
-                            <CircularProgress/>
+                            <CircularProgress />
                             :
                             <DateRangePicker
                                 isDayBlocked={d => this.props.datasReservadas.has(d.format("DD/MM/YYYY"))}
@@ -60,7 +82,7 @@ class Reservas extends React.Component {
                                 startDateId="your_unique_start_date_id" // PropTypes.string.isRequired,
                                 endDate={this.state.endDate} // momentPropTypes.momentObj or null,
                                 endDateId="your_unique_end_date_id" // PropTypes.string.isRequired,
-                                onDatesChange={({ startDate, endDate }) => this.setState({ startDate, endDate })} // PropTypes.func.isRequired,
+                                onDatesChange={this.dateChangeHandler} // PropTypes.func.isRequired,
                                 focusedInput={this.state.focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
                                 onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,
                             />}
@@ -70,9 +92,9 @@ class Reservas extends React.Component {
                     </div>
                     <div style={{ alignSelf: 'center', marginLeft: 20 }}>
                         {this.props.loading
-                            ? <CircularProgress/>
+                            ? <CircularProgress />
                             : <Button
-                                disabled={!(startDate && endDate)}
+                                disabled={!(startDate && endDate) || this.state.dataIntercalada}
                                 onClick={this.confirmar}
                                 size="medium"
                                 style={{ color: '#1B5E20' }} >
@@ -83,9 +105,18 @@ class Reservas extends React.Component {
                     </div>
 
                 </div>
+                {
+                    this.state.dataIntercalada &&
+                    <Typography style={{ color: '#cc0000', marginLeft: 20, marginTop: 10 }} component="p">
+                        Data inválida. Já existem datas reservadas entre as datas que você solicitou.
+                    </Typography>
+                }
+
                 <Typography variant="display2" style={{ fontSize: 30, color: '#1B5E20', opacity: 1, marginTop: 40, marginLeft: 20 }}>
                     Reservas anteriores
                 </Typography>
+
+
                 <div style={{ margin: 20, color: '#1B5E20', alignSelf: 'center' }}>
                     {
                         this.props.minhasReservas.length > 0
@@ -115,7 +146,7 @@ class Reservas extends React.Component {
                             :
                             this.props.minhasReservasLoading
                                 ?
-                                <CircularProgress/>
+                                <CircularProgress />
                                 :
                                 "Você ainda não tem reservas."
                     }

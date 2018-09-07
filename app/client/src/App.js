@@ -25,7 +25,6 @@ const theme = createMuiTheme({
 class App extends Component {
     render() {
         console.log(this.props.isAdmin)
-
         let routes = (
             <Switch>
                 <Route path="/" exact component={Home} />
@@ -34,6 +33,16 @@ class App extends Component {
         );
 
         if (this.props.isAuthenticated) {
+            routes = (
+                <Switch>
+                    <Route path="/reservas" component={Reservas} />
+                    <Route path="/" exact component={Home} />
+                    <Redirect to="/" />
+                </Switch>
+            );
+        }
+
+        if (this.props.isAdmin) {
             routes = (
                 <Switch>
                     <Route path="/reservas" component={Admin} />
