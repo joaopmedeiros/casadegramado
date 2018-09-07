@@ -3,6 +3,7 @@ import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 
 import Home from './screens/Home';
+import Admin from './screens/Admin'
 import Reservas from './screens/Reservas'
 
 import 'react-dates/initialize';
@@ -35,18 +36,19 @@ class App extends Component {
         if (this.props.isAuthenticated) {
             routes = (
                 <Switch>
-                    <Route path="/reservas" component={Reservas} />
+                    <Route path="/reservas" component={Admin} />
                     <Route path="/" exact component={Home} />
                     <Redirect to="/" />
                 </Switch>
             );
         }
+
+
         return (
             <div>
                 <MuiThemeProvider theme={theme}>
                     <div>
-
-                        {this.props.isAuthenticated && <AppBar />}
+                        {this.props.isAuthenticated && <AppBar isAdmin={this.props.isAdmin}/>}
                         {routes}
                     </div>
                 </MuiThemeProvider>
