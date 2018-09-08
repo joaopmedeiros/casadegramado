@@ -37,12 +37,6 @@ class Reservas extends React.Component {
     }
 
     dateChangeHandler = ({ startDate, endDate }) => {
-        console.log(this.props.datasReservadas)
-        console.log(startDate)
-        console.log(endDate)
-        let x = startDate
-        let y = endDate
-
 
         for (let i = moment(startDate); i.diff(endDate, 'days') <= 0; i.add(1, 'days')) {
             if (this.props.datasReservadas.has(i.format('L'))) {
@@ -52,7 +46,7 @@ class Reservas extends React.Component {
 
         }
 
-        this.setState({ startDate: x, endDate: y, dataIntercalada: false })
+        this.setState({ startDate, endDate, dataIntercalada: false })
 
     }
 
