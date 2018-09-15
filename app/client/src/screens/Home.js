@@ -1,16 +1,18 @@
 import React from 'react'
 
+import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
-import titleImage from '../images/gesiel.png'
+import titleImage from '../images/gesiel.jpg'
 import './Gesiel/styles.css'
 import Login from '../components/Login'
 import Cadastro from '../components/Cadastro'
 
 import FlashOn from '@material-ui/icons/FlashOn';
 import Group from '@material-ui/icons/Group';
+
 
 import { Typography } from '@material-ui/core';
 
@@ -32,15 +34,17 @@ const photos = [
 
 
 export default class Home extends React.Component {
-
-
     constructor() {
         super();
         this.state = {
             currentImage: 0,
             login: false,
             cadastro: false,
-            lightboxIsOpen: false
+            lightboxIsOpen: false,
+            email: '',
+            assunto: '',
+            nome: '',
+            mensagem: ''
         };
 
         this.closeLightbox = this.closeLightbox.bind(this);
@@ -48,6 +52,12 @@ export default class Home extends React.Component {
         this.gotoNext = this.gotoNext.bind(this);
         this.gotoPrevious = this.gotoPrevious.bind(this);
     }
+
+    handleChange = name => event => {
+        this.setState({
+            [name]: event.target.value,
+        });
+    };
 
     openLightbox(event, obj) {
         this.setState({
@@ -183,15 +193,52 @@ export default class Home extends React.Component {
                     isOpen={this.state.lightboxIsOpen}
                 />
                 <div style={{ backgroundColor: '#EAEEF2' }}>
-                    <div style={{ padding: 30 }}>
-                        <Typography variant="display2" style={{ textAlign: 'center' }}>
-                            Contato
-                        </Typography>
-                    </div>
 
-                    <div style={{ flexDirection: 'row' }}>
-                        <Map isMarkerShown />
+                    <div style={{ display: 'flex', flex: 1 }}>
+                        <div style={{ flex: 1 }}>
+                            <Map isMarkerShown />
+                        </div>
+                        <div style={{ flex: 1, textAlign: 'center', marginTop: 10 }}>
+                            <Typography variant="display2">
+                                Contato
+                            </Typography>
+                            <div style={{ padding: 20 }}>
+                                <TextField
+                                    id="password-input"
+                                    label="Nome"
+                                    margin="dense"
+                                    fullWidth
+                                    onChange={this.handleChange('nome')}
+                                />
+                                <TextField
+                                    margin="dense"
+                                    label="Email"
+                                    type="email"
+                                    fullWidth
+                                    onChange={this.handleChange('email')}
+                                />
+                                <TextField
+                                    label="Assunto"
+                                    margin="dense"
+                                    fullWidth
+                                    onChange={this.handleChange('assunto')}
+                                />
+                                <TextField
+                                    label="Mensagem"
+                                    multiline
+                                    margin="dense"
+                                    fullWidth
+                                    onChange={this.handleChange('mensagem')}
+                                />
+                                <div style={{marginTop: 20, marginBottom: 10}}>
+                                <Button variant="raised" color="primary">
+                                    Enviar
+                              </Button>
+                                </div>
+                                
+                            </div>
 
+                        </div>
                     </div>
                 </div>
             </div>
