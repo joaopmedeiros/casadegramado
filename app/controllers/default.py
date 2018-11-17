@@ -183,7 +183,7 @@ def atualizareserva():
     reserva_id = request.json.get('id_reserva')
     acao = request.json.get('acao')
     if current_user.adm:
-        possiveis_acoes = ['Aprovar','Cancelar']
+        possiveis_acoes = ['Pendente','Aprovado','Cancelado']
         if acao not in possiveis_acoes:
             return jsonify({ 'retorno': 'Acao nao permitida' }), 422
         else:
@@ -192,7 +192,7 @@ def atualizareserva():
             db.session.commit()
             return jsonify({'retorno': 'Reserva atualizada'}), 200
     else:
-        possiveis_acoes = ['Cancelar']
+        possiveis_acoes = ['Cancelado']
         if acao not in possiveis_acoes:
             return jsonify({ 'retorno': 'Acao nao permitida' }), 422
         else:
@@ -205,7 +205,7 @@ def atualizareserva():
 @login_required
 def datasreservadas():
     datas = []
-    for i in Reservas.query.all():
+    for i in Reservas.query.all().filter(Reservas.status != 'Cancelado'):
         datas.append(i.data_checkin)
         data_atual = i.data_checkin
         data_checkout = i.data_checkout
@@ -213,3 +213,34 @@ def datasreservadas():
             data_atual = data_atual + timedelta(days=1)
             datas.append(data_atual)
     return jsonify({ 'retorno': 'ok', 'datas': datas }), 200
+
+@app.route("/datasbloqueadas", methods=["GET"])
+@login_required
+def datasbloqueadas():
+    datas = []
+    for i in Reservas.query.all().filter(Reservas.status == 'Bloqueado'):
+        datas.append(i.data_checkin)
+        data_atual = i.data_checkin
+        data_checkout = i.data_checkout
+        while (data_atual != data_checkout):
+            data_atual = data_atual + timedelta(days=1)
+            datas.append(data_atual)
+    return jsonify({ 'retorno': 'ok', 'datas': datas }), 200
+
+@app.route("/bloqueardatas", methods=["POST"])
+@login_required
+def bloqueardatas():
+    if current_user.adm:
+        data_checkin = request.json.get('data_checkin')
+        data_checkout = request.json.get('data_checkout')
+        id_usuario = request.json.get('id_usuario')
+        valor = 0
+        desconto = 0
+        valor_final = 0
+        status = 'Bloqueado'
+        nova_reserva = Reservas(data_checkin,data_checkout,valor,id_usuario,desconto,valor_final,status)
+        db.session.add(nova_reserva)
+        db.session.commit()
+        return jsonify({ 'retorno': 'ok', 'id_reserva': nova_reserva.id_reserva }), 201
+    else:
+        return jsonify({ 'retorno': 'Acao nao permitida' }), 422

@@ -55,14 +55,14 @@ class Reservas(db.Model):
 
     usuario = db.relationship('Usuario', foreign_keys=usuario_id)
 
-    def __init__(self, data_checkin, data_checkout, valor, usuario_id, desconto, valor_final):
+    def __init__(self, data_checkin, data_checkout, valor, usuario_id, desconto, valor_final, status = 'Pendente'):
         self.data_checkin = data_checkin
         self.data_checkout = data_checkout
         self.valor = valor
         self.usuario_id = usuario_id
         self.desconto = desconto
         self.valor_final = valor_final
-        self.status = 'Pendente'
+        self.status = status
 
     def __repr__(self):
         return "<Reserva %r>" % self.id_reserva
