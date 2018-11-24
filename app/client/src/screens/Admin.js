@@ -24,7 +24,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 
 import { connect } from 'react-redux';
-import * as actions from '../actions/reserva'
+import * as reservaActions from '../actions/reserva'
+import * as adminActions from '../actions/admin'
 
 
 
@@ -51,6 +52,7 @@ class Admin extends React.Component {
     }
 
     componentDidMount() {
+        this.props.loadReservas()
         this.props.loadDatasReservadas()
     }
 
@@ -207,13 +209,15 @@ const mapStateToProps = (state) => {
     return {
         datasReservadas: state.reserva.datasReservadas,
         datasReservadasLoading: state.reserva.datasReservadasLoading,
+        reservas: state.admin.reservas
     }
 }
 
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadDatasReservadas: () => dispatch(actions.datasReservadas()),
+        loadDatasReservadas: () => dispatch(reservaActions.datasReservadas()),
+        loadReservas: () => dispatch(adminActions.getReservas())
     }
 }
 

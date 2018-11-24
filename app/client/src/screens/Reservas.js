@@ -32,7 +32,7 @@ class Reservas extends React.Component {
     confirmar = () => {
         const { startDate, endDate } = this.state
         if (this.state.startDate && this.state.endDate) {
-            this.props.reservar(this.props.idUsuario, startDate.locale("en").utcOffset(-900).format("ddd, DD MMM YYYY HH:mm:ss [GMT]"), endDate.locale("en").utcOffset(-900).format("ddd, DD MMM YYYY HH:mm:ss [GMT]"))
+            this.props.reservar(this.props.idUsuario, startDate.locale("en").utc().format("ddd, DD MMM YYYY HH:mm:ss [GMT]"), endDate.locale("en").utc().format("ddd, DD MMM YYYY HH:mm:ss [GMT]"))
         }
     }
 
@@ -51,6 +51,7 @@ class Reservas extends React.Component {
     }
 
     render() {
+        console.log(this.props.minhasReservas)
         const { endDate, startDate } = this.state
         if (this.props.loading && !this.state.clean) this.setState({ clean: true })
         console.log(this.state.dataIntercalada)

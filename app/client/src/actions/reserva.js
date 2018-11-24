@@ -80,8 +80,9 @@ export const minhasReservas = (idUsuario) => async dispatch => {
     try {
         dispatch(minhasReservasStart())
         const reservas = await axios.post('/getreservas', { 'id_usuario': idUsuario })
-        const datas = [...reservas.data.reservas['1'].map(r => [moment(r[0]), moment(r[1])])].sort((a, b) => b[0] - a[0])
-        dispatch(minhasReservasSuccess(datas.map(d => [d[0].utcOffset(0).format("DD/MM/YYYY"), d[1].utcOffset(0).format("DD/MM/YYYY")])))
+        console.log(reservas)
+        const datas = [...reservas.data.reservas[idUsuario].map(r => [moment(r[0]), moment(r[1])])].sort((a, b) => b[0] - a[0])
+        dispatch(minhasReservasSuccess(datas.map(d => [d[0].utc().format("DD/MM/YYYY"), d[1].utc().format("DD/MM/YYYY")])))
     }
     catch (error) {
         dispatch(minhasReservasFail(error))

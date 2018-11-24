@@ -13,10 +13,12 @@ import thunk from 'redux-thunk'
 
 import UsuarioReducer from './reducers/UsuarioReducer'
 import ReservaReducer from './reducers/ReservaReducer'
+import AdminReducer from './reducers/AdminReducer'
 
 const rootReducer = combineReducers({
     reserva: ReservaReducer,
-    usuario: UsuarioReducer
+    usuario: UsuarioReducer,
+    admin: AdminReducer
 })
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

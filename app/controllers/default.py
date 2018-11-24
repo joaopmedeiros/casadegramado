@@ -177,6 +177,20 @@ def getreservas():
     dict_user[id_usuario] = reservas_usr
     return jsonify({ 'retorno': 'ok', 'reservas': dict_user }), 200
 
+
+@app.route("/getreservasadm", methods=["GET"])
+@login_required
+def getreservasadm():
+    if current_user.adm:
+        reservas_usr = []
+        #lista_reservas = Reservas.query.all()        
+        lista_reservas = (Reservas.query.join(Usuario, Reservas.usuario_id == Usuario.id).add_columns(Usuario.nome, Reservas.data_checkin, Reservas.data_checkout, Reservas.status))
+        for i in lista_reservas:
+            reservas_usr.append((i.nome,i.data_checkin,i.data_checkout,i.status)) 
+        return jsonify({ 'retorno': 'ok', 'reservas': reservas_usr }), 200
+    else:
+        return jsonify({ 'retorno': 'Acao nao permitida' }), 422
+
 @app.route("/atualizareserva", methods=["POST"])
 @login_required
 def atualizareserva():
@@ -205,7 +219,7 @@ def atualizareserva():
 @login_required
 def datasreservadas():
     datas = []
-    for i in Reservas.query.all().filter(Reservas.status != 'Cancelado'):
+    for i in Reservas.query.filter(Reservas.status != 'Cancelado'):
         datas.append(i.data_checkin)
         data_atual = i.data_checkin
         data_checkout = i.data_checkout
@@ -218,7 +232,7 @@ def datasreservadas():
 @login_required
 def datasbloqueadas():
     datas = []
-    for i in Reservas.query.all().filter(Reservas.status == 'Bloqueado'):
+    for i in Reservas.query.filter(Reservas.status == 'Bloqueado'):
         datas.append(i.data_checkin)
         data_atual = i.data_checkin
         data_checkout = i.data_checkout
