@@ -173,7 +173,6 @@ class Admin extends React.Component {
                                                 </MenuItem>
                                                 <MenuItem value="Aprovado">Aprovado</MenuItem>
                                                 <MenuItem value="Cancelado">Cancelado</MenuItem>
-                                                <MenuItem value="Bloqueado">Bloqueado</MenuItem>
                                             </Select></TableCell>
                                         </TableRow>)
                                     }
