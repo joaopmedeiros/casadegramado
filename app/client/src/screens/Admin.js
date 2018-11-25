@@ -91,7 +91,7 @@ class Admin extends React.Component {
 
     render() {
         const { classes } = this.props;
-
+        console.log(this.props.reservas)
         return (
             <React.Fragment>
                 <CssBaseline />
@@ -155,44 +155,26 @@ class Admin extends React.Component {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-
-                                    <TableRow>
-                                        <TableCell>Gesiel</TableCell>
-                                        <TableCell>20/10/2018</TableCell>
-                                        <TableCell>23/10/2018</TableCell>
-                                        <TableCell><Select
-                                            value={this.state.age}
-                                            onChange={this.handleChange}
-                                            displayEmpty
-                                            name="age"
-                                            className={classes.selectEmpty}
-                                        >
-                                            <MenuItem value="">
-                                                <em>Aguardando</em>
-                                            </MenuItem>
-                                            <MenuItem value={10}>Aceito</MenuItem>
-                                            <MenuItem value={20}>Cancelado</MenuItem>
-                                        </Select></TableCell>
-                                    </TableRow>
-
-                                    <TableRow>
-                                        <TableCell>Gesiel2</TableCell>
-                                        <TableCell>20/11/2018</TableCell>
-                                        <TableCell>23/11/2018</TableCell>
-                                        <TableCell><Select
-                                            value={10}
-                                            onChange={this.handleChange}
-                                            displayEmpty
-                                            name="age"
-                                            className={classes.selectEmpty}
-                                        >
-                                            <MenuItem value="">
-                                                <em>Aguardando</em>
-                                            </MenuItem>
-                                            <MenuItem value={10}>Aceito</MenuItem>
-                                            <MenuItem value={20}>Cancelado</MenuItem>
-                                        </Select></TableCell>
-                                    </TableRow>
+                                    {
+                                        this.props.reservas.map((r, i) => <TableRow key={i}>
+                                            <TableCell>{r[0]}</TableCell>
+                                            <TableCell>{r[1]}</TableCell>
+                                            <TableCell>{r[2]}</TableCell>
+                                            <TableCell><Select
+                                                value={this.state.age}
+                                                onChange={this.handleChange}
+                                                displayEmpty
+                                                name="age"
+                                                className={classes.selectEmpty}
+                                            >
+                                                <MenuItem value="">
+                                                    <em>Aguardando</em>
+                                                </MenuItem>
+                                                <MenuItem value={10}>Aceito</MenuItem>
+                                                <MenuItem value={20}>Cancelado</MenuItem>
+                                            </Select></TableCell>
+                                        </TableRow>)
+                                    }
 
                                 </TableBody>
                             </Table>
