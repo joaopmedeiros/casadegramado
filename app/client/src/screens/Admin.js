@@ -46,8 +46,9 @@ class Admin extends React.Component {
         focusedInput: null,
         clean: false,
         dataIntercalada: false,
-        age: '',
+        status: 'Pendente',
         name: 'hai',
+        id_reserva: -1
     }
 
     componentDidMount() {
@@ -83,8 +84,9 @@ class Admin extends React.Component {
 
     }
 
-    handleChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
+    handleChange = (event, id) => {
+        this.setState({ [event.target.name]: event.target.value, id_reserva: id });
+        this.props.updateReserva(id, event.target.value)
     };
 
 
@@ -160,18 +162,18 @@ class Admin extends React.Component {
                                             <TableCell>{moment(r[1]).utc().format("DD/MM/YYYY")}</TableCell>
                                             <TableCell>{moment(r[2]).utc().format("DD/MM/YYYY")}</TableCell>
                                             <TableCell><Select
-                                                style={{}}
-                                                value={this.state.age}
-                                                onChange={() => true}
+                                                style={{ minWidth: 150 }}
+                                                value={(this.state.status && this.state.id_reserva === r[4]) ? this.state.status : r[3]}
+                                                onChange={event => this.handleChange(event, r[4])}
                                                 displayEmpty
-                                                name="age"
+                                                name="status"
                                             >
-                                                <MenuItem value="">
+                                                <MenuItem value="Pendente">
                                                     <em>Pendente</em>
                                                 </MenuItem>
-                                                <MenuItem value={10}>Aprovado</MenuItem>
-                                                <MenuItem value={20}>Cancelado</MenuItem>
-                                                <MenuItem value={20}>Bloqueado</MenuItem>
+                                                <MenuItem value="Aprovado">Aprovado</MenuItem>
+                                                <MenuItem value="Cancelado">Cancelado</MenuItem>
+                                                <MenuItem value="Bloqueado">Bloqueado</MenuItem>
                                             </Select></TableCell>
                                         </TableRow>)
                                     }
@@ -199,7 +201,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         loadDatasReservadas: () => dispatch(reservaActions.datasReservadas()),
-        loadReservas: () => dispatch(adminActions.getReservas())
+        loadReservas: () => dispatch(adminActions.getReservas()),
+        updateReserva: (id_reserva, acao) => dispatch(adminActions.updateReserva(id_reserva, acao))
     }
 }
 
