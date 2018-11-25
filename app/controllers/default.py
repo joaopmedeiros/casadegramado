@@ -197,7 +197,7 @@ def atualizareserva():
     reserva_id = request.json.get('id_reserva')
     acao = request.json.get('acao')
     if current_user.adm:
-        possiveis_acoes = ['Pendente','Aprovado','Cancelado']
+        possiveis_acoes = ['Bloqueado','Pendente','Aprovado','Cancelado']
     else:
         possiveis_acoes = ['Cancelado']
     if acao not in possiveis_acoes:
