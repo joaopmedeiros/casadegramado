@@ -27,7 +27,7 @@ export const login = (email, senha) => async dispatch => {
         });
     }
     catch (error) {
-        dispatch({ type: types.LOGIN_FAIL, error})
+        dispatch({ type: types.LOGIN_FAIL, error })
     }
 }
 
@@ -41,7 +41,3 @@ export const logout = () => async dispatch => {
     }
 
 }
-
-
-
-

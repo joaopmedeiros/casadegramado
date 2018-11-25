@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import Paper from '@material-ui/core/Paper';
-import moment from 'moment'
+import moment, { relativeTimeThreshold } from 'moment'
 
 import { connect } from 'react-redux';
 import * as actions from '../actions/reserva'
@@ -48,6 +48,10 @@ class Reservas extends React.Component {
 
         this.setState({ startDate, endDate, dataIntercalada: false })
 
+    }
+
+    handleCancelar = (id_reserva) => {
+        this.props.updateReserva(this.props.idUsuario, id_reserva, 'Cancelado')
     }
 
     render() {
@@ -123,6 +127,7 @@ class Reservas extends React.Component {
                                             <TableCell>Check-in</TableCell>
                                             <TableCell>Check-out</TableCell>
                                             <TableCell>Status</TableCell>
+                                            <TableCell>Ação</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -131,7 +136,8 @@ class Reservas extends React.Component {
                                                 <TableRow>
                                                     <TableCell>{n[0]}</TableCell>
                                                     <TableCell>{n[1]}</TableCell>
-                                                    <TableCell>Aguardando</TableCell>
+                                                    <TableCell>{n[2]}</TableCell>
+                                                    <TableCell><Button disabled={n[2] === "Cancelado"} onClick={() => this.handleCancelar(n[3])} color="primary" size="small">Cancelar</Button></TableCell>
                                                 </TableRow>
                                             );
                                         })}
@@ -168,7 +174,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         reservar: (idUsuario, inicio, fim) => dispatch(actions.reservar(idUsuario, inicio, fim)),
         loadDatasReservadas: () => dispatch(actions.datasReservadas()),
-        loadMinhasReservas: (idUsuario) => dispatch(actions.minhasReservas(idUsuario))
+        loadMinhasReservas: (idUsuario) => dispatch(actions.minhasReservas(idUsuario)),
+        updateReserva: (idUsuario, id_reserva, acao) => dispatch(actions.updateReserva(idUsuario, id_reserva, acao))
     }
 }
 

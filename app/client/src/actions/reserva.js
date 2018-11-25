@@ -25,7 +25,7 @@ const datasReservadasSuccess = (datasReservadas) => {
 
 export const reservar = (idUsuario, inicio, fim) => async dispatch => {
     dispatch({ type: types.RESERVAR_START })
-    const data = {'id_usuario': idUsuario, 'data_checkin': inicio, 'data_checkout': fim}
+    const data = { 'id_usuario': idUsuario, 'data_checkin': inicio, 'data_checkout': fim }
 
     try {
         const res = await axios.post('/reserva', data)
@@ -81,10 +81,25 @@ export const minhasReservas = (idUsuario) => async dispatch => {
         dispatch(minhasReservasStart())
         const reservas = await axios.post('/getreservas', { 'id_usuario': idUsuario })
         console.log(reservas)
-        const datas = [...reservas.data.reservas[idUsuario].map(r => [moment(r[0]), moment(r[1])])].sort((a, b) => b[0] - a[0])
-        dispatch(minhasReservasSuccess(datas.map(d => [d[0].utc().format("DD/MM/YYYY"), d[1].utc().format("DD/MM/YYYY")])))
+        const datas = [...reservas.data.reservas[idUsuario].map(r => [moment(r[0]), moment(r[1]), r[2], r[3]])].sort((a, b) => b[0] - a[0])
+        dispatch(minhasReservasSuccess(datas.map(d => [d[0].utc().format("DD/MM/YYYY"), d[1].utc().format("DD/MM/YYYY"), d[2], d[3]])))
     }
     catch (error) {
         dispatch(minhasReservasFail(error))
+    }
+}
+
+
+export const updateReserva = (id_usuario, id_reserva, acao) => async dispatch => {
+    try {
+        console.log({ id_reserva, acao })
+        const res = await axios.post('/atualizareserva', {
+            id_reserva,
+            acao
+        })
+        console.log(res)
+        dispatch(minhasReservas(id_usuario))
+    } catch (error) {
+        console.log(error.response)
     }
 }
