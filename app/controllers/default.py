@@ -198,22 +198,14 @@ def atualizareserva():
     acao = request.json.get('acao')
     if current_user.adm:
         possiveis_acoes = ['Pendente','Aprovado','Cancelado']
-        if acao not in possiveis_acoes:
-            return jsonify({ 'retorno': 'Acao nao permitida' }), 422
-        else:
-            reserva = Reservas.query.filter_by(id_reserva=reserva_id).first()
-            atualiza_reserva = reserva.update().where(id_reserva=reserva_id).values(status=acao)
-            db.session.commit()
-            return jsonify({'retorno': 'Reserva atualizada'}), 200
     else:
         possiveis_acoes = ['Cancelado']
-        if acao not in possiveis_acoes:
-            return jsonify({ 'retorno': 'Acao nao permitida' }), 422
-        else:
-            reserva = Reservas.query.filter_by(id_reserva=reserva_id).first()
-            atualiza_reserva = reserva.update().where(id_reserva=reserva_id).values(status=acao)
-            db.session.commit()
-            return jsonify({'retorno': 'Reserva atualizada'}), 200
+    if acao not in possiveis_acoes:
+        return jsonify({ 'retorno': 'Acao nao permitida' }), 422
+    else:
+        db.session.query(Reservas).filter_by(id_reserva=reserva_id).update({"status":acao})
+        db.session.commit()            
+        return jsonify({'retorno': 'Reserva atualizada'}), 200
 
 @app.route("/datasreservadas", methods=["GET"])
 @login_required
