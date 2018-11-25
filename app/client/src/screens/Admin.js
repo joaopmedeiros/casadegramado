@@ -32,7 +32,6 @@ import * as adminActions from '../actions/admin'
 const styles = theme => ({
     root: {
         display: 'flex',
-        position: 'fixed',
         width: '100%',
         height: '100%'
     },
@@ -158,20 +157,21 @@ class Admin extends React.Component {
                                     {
                                         this.props.reservas.map((r, i) => <TableRow key={i}>
                                             <TableCell>{r[0]}</TableCell>
-                                            <TableCell>{r[1]}</TableCell>
-                                            <TableCell>{r[2]}</TableCell>
+                                            <TableCell>{moment(r[1]).utc().format("DD/MM/YYYY")}</TableCell>
+                                            <TableCell>{moment(r[2]).utc().format("DD/MM/YYYY")}</TableCell>
                                             <TableCell><Select
+                                                style={{}}
                                                 value={this.state.age}
-                                                onChange={this.handleChange}
+                                                onChange={() => true}
                                                 displayEmpty
                                                 name="age"
-                                                className={classes.selectEmpty}
                                             >
                                                 <MenuItem value="">
-                                                    <em>Aguardando</em>
+                                                    <em>Pendente</em>
                                                 </MenuItem>
-                                                <MenuItem value={10}>Aceito</MenuItem>
+                                                <MenuItem value={10}>Aprovado</MenuItem>
                                                 <MenuItem value={20}>Cancelado</MenuItem>
+                                                <MenuItem value={20}>Bloqueado</MenuItem>
                                             </Select></TableCell>
                                         </TableRow>)
                                     }

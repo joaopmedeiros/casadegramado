@@ -1,11 +1,12 @@
 html {
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow-y: scroll;
+  overflow-x: auto;
 }
 
 body, #root {
   font-family: 'Montserrat';
   width: 100%;
+  height: 100vh;
   margin: 0;
   padding: 0;
 }
