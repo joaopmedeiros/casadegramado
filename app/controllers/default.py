@@ -184,9 +184,9 @@ def getreservasadm():
     if current_user.adm:
         reservas_usr = []
         #lista_reservas = Reservas.query.all()        
-        lista_reservas = (Reservas.query.join(Usuario, Reservas.usuario_id == Usuario.id).add_columns(Usuario.nome, Reservas.data_checkin, Reservas.data_checkout, Reservas.status))
+        lista_reservas = (Reservas.query.join(Usuario, Reservas.usuario_id == Usuario.id).add_columns(Usuario.nome, Reservas.data_checkin, Reservas.data_checkout, Reservas.status, Reservas.id_reserva))
         for i in lista_reservas:
-            reservas_usr.append((i.nome,i.data_checkin,i.data_checkout,i.status)) 
+            reservas_usr.append((i.nome, i.data_checkin,i.data_checkout,i.status, i.id_reserva)) 
         return jsonify({ 'retorno': 'ok', 'reservas': reservas_usr }), 200
     else:
         return jsonify({ 'retorno': 'Acao nao permitida' }), 422
